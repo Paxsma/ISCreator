@@ -104,6 +104,7 @@ void iscreate::instruction_set::load(const std::string &dir) {
 
             if (!inst.HasMember("operands") || !inst["operands"].IsArray()) {
                   std::cerr << "Invalid JSON format. Expected an array for operands." << std::endl;
+                  return;
             }
 
             std::vector<operand> operands;
