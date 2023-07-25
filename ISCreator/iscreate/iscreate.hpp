@@ -76,6 +76,15 @@ namespace iscreate {
                   return;
             }
 
+            /* Add instruction */
+            void add(const std::string &mnemonic, const std::string &hint) {
+                  instruction i;
+                  i.mnemonic = mnemonic;
+                  i.hint = hint;
+                  this->instructions.insert(std::make_pair(!this->instructions.empty() ? this->instructions.rbegin()->first + 1u : 0u, i));
+                  return;
+            }
+
 #pragma endregion
 
 #pragma region file
