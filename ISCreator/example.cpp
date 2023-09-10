@@ -23,7 +23,11 @@ std::int32_t main() {
 
       /* Print opcodes */
       std::cout << "Enumeral: \n"
-                << is.represent_opcodes() << std::endl;
+                << is.represent_enum_opcodes() << std::endl;
+      std::cout << "Enumeral opencodings: \n"
+                << is.represent_enum_opencodings() << std::endl;
+      std::cout << "Enumeral opkinds: \n"
+                << is.represent_enum_opkinds() << std::endl;
       std::cout << "\n\nEncoding: \n"
                 << is.represent_opencodings() << std::endl;
       std::cout << "\n\nKind: \n"
