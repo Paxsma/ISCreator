@@ -131,7 +131,7 @@ namespace iscreate {
                   /* Create definition */
                   switch (lang) {
                         case language::cpp: {
-                              definition = "enum class opcodes {\n";
+                              definition = "enum class " + this->opcodes_enum_name + " {\n";
                               break;
                         }
                         case language::c: {
@@ -150,7 +150,7 @@ namespace iscreate {
                               break;
                         }
                         case language::c: {
-                              footer = "} opcodes;";
+                              footer = "} " + this->opcodes_enum_name + ";";
                               break;
                         }
                         default: {
@@ -221,7 +221,7 @@ namespace iscreate {
                   /* Create definition */
                   switch (lang) {
                         case language::cpp: {
-                              definition = "enum class operand_encoding {\n";
+                              definition = "enum class " + this->opencodings_enum_name + " {\n";
                               break;
                         }
                         case language::c: {
@@ -240,7 +240,7 @@ namespace iscreate {
                               break;
                         }
                         case language::c: {
-                              footer = "} operand_encoding;";
+                              footer = "} " + this->opencodings_enum_name + ";";
                               break;
                         }
                         default: {
@@ -292,7 +292,7 @@ namespace iscreate {
                   /* Create definition */
                   switch (lang) {
                         case language::cpp: {
-                              definition = "enum class operand_kind {\n";
+                              definition = "enum class " + this->opkinds_enum_name + " {\n";
                               break;
                         }
                         case language::c: {
@@ -311,7 +311,7 @@ namespace iscreate {
                               break;
                         }
                         case language::c: {
-                              footer = "} operand_kind;";
+                              footer = "} " + this->opkinds_enum_name + ";";
                               break;
                         }
                         default: {
@@ -381,15 +381,15 @@ namespace iscreate {
                   switch (lang) {
                         case language::cpp: {
                               definition = "struct optable_encoding {\n\
-   opcodes op;\n\
+   " + this->opcodes_enum_name + " op;\n\
    std::vector<operand_encoding> encodings;\n\
 };\n\
-static std::map<opcodes, optable_encoding> opencodings = {\n";
+static std::map<" + this->opcodes_enum_name + ", optable_encoding> opencodings = {\n";
                               break;
                         }
                         case language::c: {
                               definition = "struct optable_encoding {\n\
-   opcodes op;\n\
+   " + this->opcodes_enum_name + " op;\n\
    operand_encoding []encodings;\n\
    size_t num_encodings;\n\
 };\n\
@@ -442,10 +442,10 @@ static struct optable_encoding opencodings[] = {\n";
                                     break;
                               }
                               case language::cpp: { /* {opcodes::??, {opcodes::??, {operand_encoding::??, operand_encoding::??}}} 1 */
-                                    retn += "   {opcodes::" + name + ", {opcodes::" + name + ", {";
+                                    retn += "   {" + this->opcodes_enum_name + "::" + name + ", {" + this->opcodes_enum_name + "::" + name + ", {";
                                     for (auto idx = 0u; idx < inst.second.operands.size(); ++idx) {
                                           const auto i = inst.second.operands[idx];
-                                          retn += "operand_encoding::" + i.encoding + (idx != inst.second.operands.size() - 1u ? ", " : "");
+                                          retn += this->opencodings_enum_name + "::" + i.encoding + (idx != inst.second.operands.size() - 1u ? ", " : "");
                                     }
                                     retn += "}}}" + std::string(!last ? "," : "");
                                     retn += " /* " + hint + " */\n";
@@ -491,15 +491,15 @@ static struct optable_encoding opencodings[] = {\n";
                   switch (lang) {
                         case language::cpp: {
                               definition = "struct optable_kind {\n\
-   opcodes op;\n\
+   " + this->opcodes_enum_name + " op;\n\
    std::vector<operand_kind> kinds;\n\
 };\n\
-static std::map<opcodes, optable_kind> opkinds = {\n";
+static std::map<" + this->opcodes_enum_name + ", optable_kind> opkinds = {\n";
                               break;
                         }
                         case language::c: {
                               definition = "struct optable_kind {\n\
-   opcodes op;\n\
+   " + this->opcodes_enum_name + " op;\n\
    operand_encoding []kinds;\n\
    size_t num_kinds;\n\
 };\n\
@@ -552,10 +552,10 @@ static struct optable_kind opkinds[] = {\n";
                                     break;
                               }
                               case language::cpp: { /* {opcodes::??, {opcodes::??, {operand_kind::??, operand_kind::??}}}, 1 */
-                                    retn += "   {opcodes::" + name + ", {opcodes::" + name + ", {";
+                                    retn += "   {" + this->opcodes_enum_name + "::" + name + ", {" + this->opcodes_enum_name + "::" + name + ", {";
                                     for (auto idx = 0u; idx < inst.second.operands.size(); ++idx) {
                                           const auto i = inst.second.operands[idx];
-                                          retn += "operand_kind::" + i.kind + (idx != inst.second.operands.size() - 1u ? ", " : "");
+                                          retn += this->opkinds_enum_name + "::" + i.kind + (idx != inst.second.operands.size() - 1u ? ", " : "");
                                     }
                                     retn += "}}}" + std::string(!last ? "," : "");
                                     retn += " /* " + hint + " */\n";
@@ -601,19 +601,19 @@ static struct optable_kind opkinds[] = {\n";
                   switch (lang) {
                         case language::cpp: {
                               definition = "struct optable_descriptor {\n\
-   const char *const opname;\n\
-   const char *const mnemonic;\n\
-   const char *const hint;\n\
+   const char * opname;\n\
+   const char * mnemonic;\n\
+   const char * hint;\n\
    std::vector<const char *> operand_encodings;\n\
 };\n\
-static std::map<opcodes, optable_descriptor> opdescriptor = {\n";
+static std::map<" + this->opcodes_enum_name + ", optable_descriptor> opdescriptor = {\n";
                               break;
                         }
                         case language::c: {
                               definition = "struct optable_descriptor {\n\
-   const char *const opname;\n\
-   const char *const mnemonic;\n\
-   const char *const hint;\n\
+   const char * opname;\n\
+   const char * mnemonic;\n\
+   const char * hint;\n\
    const char* []operand_encodings;\n\
    size_t num_operand_encoding;\n\
 };\n\
@@ -666,7 +666,7 @@ static struct optable_descriptor opdescriptor[] = {\n";
                                     break;
                               }
                               case language::cpp: { /* {opcodes::??, {opcodes::??, {operand_kind::??, operand_kind::??}}}, 1 */
-                                    retn += "   {opcodes::" + name + ", {\"" + name + "\", \"" + inst.second.mnemonic + "\", \"" + inst.second.hint + "\", {";
+                                    retn += "   {" + this->opcodes_enum_name + "::" + name + ", {\"" + name + "\", \"" + inst.second.mnemonic + "\", \"" + inst.second.hint + "\", {";
                                     for (auto idx = 0u; idx < inst.second.operands.size(); ++idx) {
                                           const auto i = inst.second.operands[idx];
                                           retn += "\"" + i.operand_ + "(" + i.hint + ")\"" + (idx != inst.second.operands.size() - 1u ? ", " : "");
@@ -698,6 +698,10 @@ static struct optable_descriptor opdescriptor[] = {\n";
             std::map<std::intptr_t, instruction> data() {
                   return this->instructions;
             }
+
+            std::string opcodes_enum_name = "opcodes";
+            std::string opencodings_enum_name = "operand_encoding";
+            std::string opkinds_enum_name = "operand_kind";
 
           private:
             std::map<std::intptr_t, instruction> instructions;
